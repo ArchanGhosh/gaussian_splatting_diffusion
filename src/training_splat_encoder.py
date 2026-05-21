@@ -12,10 +12,12 @@ from src.splat_encoder import SplatEncoder
 from src.differentiable_renderer import DifferentiableSplatRenderer
 from src.vgg_loss import VGGLoss
 
-from src.config import DEVICE, IMG_SIZE, GRID_SIZE, SPLAT_ENCODER_BASE_BATCH_SIZE, SPLAT_ENCODER_ACCUM_STEPS, SPLAT_ENCODER_WARMUP_EPOCHS, SPLAT_ENCODER_POLISH_EPOCHS, SPLAT_ENCODER_STARTING_LR, SPLAT_ENCODER_POLISH_LR, SPLAT_ENCODER_VGG_LOSS_RAT, SPLAT_ENCODER_MSE_LOSS_RAT, SPLAT_ENCODER_TRAINING_SAVE_DIR
+from src.config import DEVICE, IMG_SIZE, GRID_SIZE, SPLAT_ENCODER_BASE_BATCH_SIZE, SPLAT_ENCODER_ACCUM_STEPS, SPLAT_ENCODER_WARMUP_EPOCHS, SPLAT_ENCODER_POLISH_EPOCHS, SPLAT_ENCODER_STARTING_LR, SPLAT_ENCODER_POLISH_LR, SPLAT_ENCODER_VGG_LOSS_RAT, SPLAT_ENCODER_MSE_LOSS_RAT, SPLAT_ENCODER_TRAINING_IMG_SAVE_DIR
+
+from src.config import BASE_CHKPNT_DIR, SPLAT_ENCODER_SAVE_NAME, SPLAT_RENDERER_SAVE_NAME
 
 
-os.makedirs(SPLAT_ENCODER_TRAINING_SAVE_DIR, exist_ok=True)
+os.makedirs(SPLAT_ENCODER_TRAINING_IMG_SAVE_DIR, exist_ok=True)
 
 torch.cuda.empty_cache()
 gc.collect() #Cleanup any memory before the start of training
@@ -26,8 +28,8 @@ print(f"\n{'-'*10} Base Batch Size : {SPLAT_ENCODER_BASE_BATCH_SIZE} {'-'*10}")
 print(f"\n{'-'*10} Gradient Accumulation Steps : {SPLAT_ENCODER_ACCUM_STEPS}, Effective Batch Size : {SPLAT_ENCODER_ACCUM_STEPS * SPLAT_ENCODER_BASE_BATCH_SIZE} {'-'*10}")
 
 # 1. Setup Models
-encoder_v2 = SplatEncoder().to(DEVICE)
-renderer_v2 = DifferentiableSplatRenderer(img_size=IMG_SIZE, grid_size=GRID_SIZE).to(DEVICE)
+splat_encoder = SplatEncoder().to(DEVICE)
+splat_renderer = DifferentiableSplatRenderer(img_size=IMG_SIZE, grid_size=GRID_SIZE).to(DEVICE)
 vgg_loss_fn = VGGLoss().to(DEVICE)
 mse_loss_fn = nn.MSELoss()
 
@@ -48,7 +50,7 @@ print(f"\n{'-'*10} Training on {len(subset_indices)} images {'-'*10}")
 
 # Start with Higher LR for coarse shapes
 print(f"\n{'-'*10} Starting LR for Optimizer : {SPLAT_ENCODER_STARTING_LR} {'-'*10}")
-opt_ae = optim.Adam(encoder_v2.parameters(), lr=SPLAT_ENCODER_STARTING_LR)
+opt_ae = optim.Adam(splat_encoder.parameters(), lr=SPLAT_ENCODER_STARTING_LR)
 
 
 TOTAL_EPOCHS = SPLAT_ENCODER_WARMUP_EPOCHS + SPLAT_ENCODER_POLISH_EPOCHS
@@ -73,8 +75,8 @@ for epoch in range(TOTAL_EPOCHS + 1):
         images_resized = F.interpolate(images, size=(128, 128), mode='bilinear', align_corners=False)
 
         # Forward
-        splat_grid = encoder_v2(images_resized)
-        reconstruction = renderer_v2(splat_grid)
+        splat_grid = splat_encoder(images_resized)
+        reconstruction = splat_renderer(splat_grid)
 
         # Loss (Base Ration : 0.8 VGG + 0.2 MSE)
         l_vgg = vgg_loss_fn(reconstruction, images_resized)
@@ -98,7 +100,7 @@ for epoch in range(TOTAL_EPOCHS + 1):
 
         # Visual Check
         with torch.no_grad():
-            save_path = os.path.join(SPLAT_ENCODER_TRAINING_SAVE_DIR, f"epoch_{epoch:03d}.png")
+            save_path = os.path.join(SPLAT_ENCODER_TRAINING_IMG_SAVE_DIR, f"epoch_{epoch:03d}.png")
             print(f"\n{'-'*10} SAVING IMG for Epoch-{epoch} at {save_path} {'-'*10}")
             fig, ax = plt.subplots(1, 2, figsize=(6,3))
 
@@ -110,9 +112,22 @@ for epoch in range(TOTAL_EPOCHS + 1):
             ax[1].set_title(f"Reconstruction (Loss {avg_loss:.2f})")
             #ax[1].axis("off")
 
-            save_path = os.path.join(SPLAT_ENCODER_TRAINING_SAVE_DIR, f"epoch_{epoch:03d}.png")
+            save_path = os.path.join(SPLAT_ENCODER_TRAINING_IMG_SAVE_DIR, f"epoch_{epoch:03d}.png")
             plt.tight_layout()
             plt.savefig(save_path, dpi=300, bbox_inches="tight")
             plt.close(fig)
 
-print(f"\n{'-'*10} Splat Encoder Training Complete \n{'-'*10}")
+print(f"\n{'-'*10} Splat Encoder Training Complete {'-'*10}")
+
+print(f"\n{'-'*10} Saving Weights of Encoder and Renderer {'-'*10}")
+
+os.makedirs(BASE_CHKPNT_DIR, exist_ok=True)
+
+ENCODER_PATH = os.join(BASE_CHKPNT_DIR, SPLAT_ENCODER_SAVE_NAME)
+RENDERER_PATH = os.join(BASE_CHKPNT_DIR, SPLAT_RENDERER_SAVE_NAME)
+
+torch.save(splat_encoder.state_dict(), ENCODER_PATH)
+print(f"\n{'-'*10} Encoder saved to: {ENCODER_PATH} {'-'*10}")
+
+torch.save(splat_renderer.state_dict(), RENDERER_PATH)
+print(f"\n{'-'*10} Renderer saved to: {RENDERER_PATH} {'-'*10}")
