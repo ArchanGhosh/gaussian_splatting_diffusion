@@ -8,7 +8,7 @@ DEVICE = DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 class VGGLoss(nn.Module):
     def __init__(self):
         super().__init__()
-        vgg = models.vgg16(pretrained=True).features
+        vgg = models.vgg16(weights=models.VGG16_Weights.DEFAULT).features
         self.slice1 = vgg[:4]
         self.slice2 = vgg[4:9]  
         self.slice3 = vgg[9:16] 
@@ -30,9 +30,14 @@ class VGGLoss(nn.Module):
         y = (y - self.mean) / self.std
 
 
-        h_x1 = self.slice1(x); h_y1 = self.slice1(y)
-        h_x2 = self.slice2(h_x1); h_y2 = self.slice2(h_y1)
-        h_x3 = self.slice3(h_x2); h_y3 = self.slice3(h_y2)
+        h_x1 = self.slice1(x)
+        h_y1 = self.slice1(y)
+
+        h_x2 = self.slice2(h_x1)
+        h_y2 = self.slice2(h_y1)
+
+        h_x3 = self.slice3(h_x2)
+        h_y3 = self.slice3(h_y2)
 
 
         loss = F.mse_loss(h_x1, h_y1) + F.mse_loss(h_x2, h_y2) + F.mse_loss(h_x3, h_y3)
