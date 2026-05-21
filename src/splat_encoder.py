@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 from src.config import TOTAL_CHANNELS
 
-class SplatEncoderV2(nn.Module):
+class SplatEncoder(nn.Module):
     def __init__(self):
         super().__init__()
         # Input 128x128 -> Output 32x32 (Factor 4 downsampling)
