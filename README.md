@@ -1,1 +1,1 @@
-# gaussian_splatting_diffusion
+# Using 2D Gaussian Splatting in Diffusion Models
