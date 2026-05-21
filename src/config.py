@@ -1,6 +1,10 @@
 import torch
 
-DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+DEVICE = (
+    "cuda" if torch.cuda.is_available()
+    else "mps" if torch.backends.mps.is_available() and torch.backends.mps.is_built()
+    else "cpu"
+)
 
 # Model Params
 IMG_SIZE = 128
