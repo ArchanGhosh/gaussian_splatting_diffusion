@@ -12,7 +12,7 @@ from src.splat_encoder import SplatEncoder
 from src.differentiable_renderer import DifferentiableSplatRenderer
 from src.vgg_loss import VGGLoss
 
-from src.config import DEVICE, IMG_SIZE, GRID_SIZE, SPLAT_ENCODER_BASE_BATCH_SIZE, SPLAT_ENCODER_ACCUM_STEPS, SPLAT_ENCODER_WARMUP_EPOCHS, SPLAT_ENCODER_POLISH_EPOCHS, SPLAT_ENCODER_STARTING_LR, SPLAT_ENCODER_POLISH_LR, SPLAT_ENCODER_VGG_LOSS_RAT, SPLAT_ENCODER_MSE_LOSS_RAT, SPLAT_ENCODER_TRAINING_IMG_SAVE_DIR
+from src.config import DEVICE, TARGET_CLASS, IMG_SIZE, GRID_SIZE, SPLAT_ENCODER_BASE_BATCH_SIZE, SPLAT_ENCODER_ACCUM_STEPS, SPLAT_ENCODER_WARMUP_EPOCHS, SPLAT_ENCODER_POLISH_EPOCHS, SPLAT_ENCODER_STARTING_LR, SPLAT_ENCODER_POLISH_LR, SPLAT_ENCODER_VGG_LOSS_RAT, SPLAT_ENCODER_MSE_LOSS_RAT, SPLAT_ENCODER_TRAINING_IMG_SAVE_DIR
 
 from src.config import BASE_CHKPNT_DIR, SPLAT_ENCODER_SAVE_NAME, SPLAT_RENDERER_SAVE_NAME
 
@@ -36,17 +36,9 @@ mse_loss_fn = nn.MSELoss()
 
 # 2. Setup Loader (SINGLE CLASS - AIRPLANES)
 
-loader = get_stl10_dataloader(batch_size=SPLAT_ENCODER_BASE_BATCH_SIZE, image_size=IMG_SIZE)
+spt_enc_loader = get_stl10_dataloader(batch_size=SPLAT_ENCODER_BASE_BATCH_SIZE, image_size=IMG_SIZE, target_class=TARGET_CLASS)
 
-subset_indices = [i for i, (_, label) in enumerate(loader.dataset) if label == 0]
-spt_enc_loader = torch.utils.data.DataLoader(
-    torch.utils.data.Subset(loader.dataset, subset_indices),
-    batch_size=SPLAT_ENCODER_BASE_BATCH_SIZE,
-    shuffle=True,
-    drop_last=True
-)
-
-print(f"\n{'-'*10} Training on {len(subset_indices)} images {'-'*10}")
+print(f"\n{'-'*10} Training on {len(spt_enc_loader)} images {'-'*10}")
 
 # Start with Higher LR for coarse shapes
 print(f"\n{'-'*10} Starting LR for Optimizer : {SPLAT_ENCODER_STARTING_LR} {'-'*10}")
