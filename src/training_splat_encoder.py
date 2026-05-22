@@ -25,7 +25,7 @@ gc.collect() #Cleanup any memory before the start of training
 
 print(f"\n{'-'*10} Starting SPLAT ENCODER TRAINING {'-'*10}") 
 print(f"\n{'-'*10} Base Batch Size : {SPLAT_ENCODER_BASE_BATCH_SIZE} {'-'*10}")
-print(f"\n{'-'*10} Gradient Accumulation Steps : {SPLAT_ENCODER_ACCUM_STEPS}, Effective Batch Size : {SPLAT_ENCODER_ACCUM_STEPS * SPLAT_ENCODER_BASE_BATCH_SIZE} {'-'*10}")
+print(f"\n{'-'*10} Gradient Accumulation Steps : {SPLAT_ENCODER_ACCUM_STEPS}, Effective Batch Size : {SPLAT_ENCODER_ACCUM_STEPS * SPLAT_ENCODER_BASE_BATCH_SIZE} {'-'*10} \n ")
 
 # 1. Setup Models
 splat_encoder = SplatEncoder().to(DEVICE)
@@ -38,7 +38,7 @@ mse_loss_fn = nn.MSELoss()
 
 spt_enc_loader = get_stl10_dataloader(batch_size=SPLAT_ENCODER_BASE_BATCH_SIZE, image_size=IMG_SIZE, target_class=TARGET_CLASS)
 
-print(f"\n{'-'*10} Training on {len(spt_enc_loader)} images {'-'*10}")
+print(f"\n{'-'*10} Training on {len(spt_enc_loader)*SPLAT_ENCODER_BASE_BATCH_SIZE} images {'-'*10}")
 
 # Start with Higher LR for coarse shapes
 print(f"\n{'-'*10} Starting LR for Optimizer : {SPLAT_ENCODER_STARTING_LR} {'-'*10}")
