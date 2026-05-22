@@ -7,7 +7,7 @@ import torch.nn.functional as F
 
 import matplotlib.pyplot as plt
 
-from stl10_loader import get_stl10_dataloader
+from src.stl10_loader import get_stl10_dataloader
 from src.splat_encoder import SplatEncoder
 from src.differentiable_renderer import DifferentiableSplatRenderer
 from src.vgg_loss import VGGLoss

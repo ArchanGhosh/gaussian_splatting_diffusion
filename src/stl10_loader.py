@@ -15,7 +15,7 @@ def get_stl10_dataloader(batch_size=32, image_size=128, target_class = 0, split=
     dataset = datasets.STL10(root=data_root, split=split, download=True, transform=transform)
     dataset.data = dataset.data[:5000]
 
-    subset_indices = [i for i, (_, label) in enumerate(dataloader.dataset) if label == target_class]
+    subset_indices = [i for i, (_, label) in enumerate(dataset) if label == target_class]
 
     dataloader = DataLoader(Subset(dataset, subset_indices),
                             batch_size = batch_size,
