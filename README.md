@@ -26,8 +26,14 @@ Example: ```pip3 install torch torchvision --index-url https://download.pytorch.
 
 #### Data : Currently the model is trained on a subset of STL10 images. These can be easily changed by changing or adding a similar data loader file like ```src/stl10_loader.py ```. And replace the corresponding function inside the training file.
 
-To Run the GS Encoder pipeline, from the base folder you can simple do ```python/python3 training_splat_encoder.py ```.
+To Run the GS Encoder training pipeline, from the base folder you can simple do 
+
+```python/python3 -m src.training_splat_encoder```.
+
+
 Training data is auto-downloaded.
+
+
 All the images generated during training should be available in the ```splat_encoder_training_imgs``` folder created automatically during the training process.
 
 The weights of the encoder are saved in the ``` CHECKPOINTS ```, along with that of the renderer.
