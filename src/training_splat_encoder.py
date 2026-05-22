@@ -115,8 +115,8 @@ print(f"\n{'-'*10} Saving Weights of Encoder and Renderer {'-'*10}")
 
 os.makedirs(BASE_CHKPNT_DIR, exist_ok=True)
 
-ENCODER_PATH = os.join(BASE_CHKPNT_DIR, SPLAT_ENCODER_SAVE_NAME)
-RENDERER_PATH = os.join(BASE_CHKPNT_DIR, SPLAT_RENDERER_SAVE_NAME)
+ENCODER_PATH = os.path.join(BASE_CHKPNT_DIR, SPLAT_ENCODER_SAVE_NAME)
+RENDERER_PATH = os.path.join(BASE_CHKPNT_DIR, SPLAT_RENDERER_SAVE_NAME)
 
 torch.save(splat_encoder.state_dict(), ENCODER_PATH)
 print(f"\n{'-'*10} Encoder saved to: {ENCODER_PATH} {'-'*10}")
