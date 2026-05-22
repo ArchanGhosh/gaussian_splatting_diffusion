@@ -26,7 +26,7 @@ SPLAT_ENCODER_STARTING_LR = 1e-3
 SPLAT_ENCODER_POLISH_LR = 2e-4
 SPLAT_ENCODER_VGG_LOSS_RAT = 0.8
 SPLAT_ENCODER_MSE_LOSS_RAT = 0.2
-SPLAT_ENCODER_TRAINING_IMG_SAVE_DIR = "splat_encoder_training_imgs"
+SPLAT_ENCODER_TRAINING_IMG_SAVE_DIR = "splat_encoder_training_imgs" # If Changed, Remember to change in gitignore
 
 
 # DIFFUSION TRAINING PARAMS
@@ -42,6 +42,6 @@ _ALPHA_HAT = torch.cumprod(_ALPHA, dim=0)
 
 
 # CHECKPOINT DIR and Names
-BASE_CHKPNT_DIR = "CHECKPOINTS"
+BASE_CHKPNT_DIR = "CHECKPOINTS" # If Changed, Remember to change in gitignore
 SPLAT_ENCODER_SAVE_NAME = "Splat_Encoder.pth"
 SPLAT_RENDERER_SAVE_NAME = "Splat_Renderer.pth"

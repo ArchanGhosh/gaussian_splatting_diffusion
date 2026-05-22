@@ -216,3 +216,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+# Folders
+CHECKPOINTS/
+splat_encoder_training_imgs/
