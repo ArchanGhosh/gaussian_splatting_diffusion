@@ -221,3 +221,4 @@ __marimo__/
 # Folders
 CHECKPOINTS/
 splat_encoder_training_imgs/
+data/
