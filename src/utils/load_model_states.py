@@ -59,7 +59,7 @@ def load_unet_diffusion_state(diffusion_model, opt_diff, BASE_CHKPNT_DIR, UNET_D
 
     diffu_chkpnt_path = os.path.join(BASE_CHKPNT_DIR, UNET_DIFF_MODEL_SAVE_NAME+str(start_epoch)+".pth")
 
-    print(f"\n{'-'*10} Loading GS Encoder Model Weights from {diffu_chkpnt_path} {'-'*10}")
+    print(f"\n{'-'*10} Loading GS Diffusion Model Weights from {diffu_chkpnt_path} {'-'*10}")
 
     if os.path.exists(diffu_chkpnt_path):
         checkpoint = torch.load(diffu_chkpnt_path, map_location=DEVICE)
@@ -71,6 +71,7 @@ def load_unet_diffusion_state(diffusion_model, opt_diff, BASE_CHKPNT_DIR, UNET_D
 
         GLOBAL_MIN = checkpoint['global_min'].to(DEVICE)
         GLOBAL_MAX = checkpoint['global_max'].to(DEVICE)
+        print(f"\n{'-'*10} Successfully Loaded GS Diffusion Model Weights from {diffu_chkpnt_path} {'-'*10}")
 
         return diffusion_model, opt_diff, GLOBAL_MIN, GLOBAL_MAX
     else:
