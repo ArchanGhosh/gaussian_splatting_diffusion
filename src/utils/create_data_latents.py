@@ -4,13 +4,13 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from src.config import DEVICE, TOTAL_CHANNELS, IMG_SIZE
+from src.config import DEVICE, TOTAL_CHANNELS, IMG_SIZE, SPLAT_ENCODER_BASE_BATCH_SIZE
 
 
 
 def create_latents(encoder, data_loader):
     try:
-        print(f"\n{'-'*10}Extracting Latents for {len(data_loader)} Images {'-'*10}")
+        print(f"\n{'-'*10}Extracting Latents for {len(data_loader)*SPLAT_ENCODER_BASE_BATCH_SIZE} Images {'-'*10}")
         print(f"Latent Channels: {TOTAL_CHANNELS}")
 
 
@@ -37,7 +37,7 @@ def create_latents(encoder, data_loader):
 
 
 
-        print(f"\n {'-'*10} Calculating New Percentile Stats {'-'*10}")
+        print(f"\n{'-'*10} Calculating New Percentile Stats {'-'*10}")
         p_low = []
         p_high = []
 

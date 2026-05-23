@@ -41,7 +41,9 @@ def load_renderer_state(BASE_CHKPNT_DIR, SPLAT_RENDERER_SAVE_NAME, DEVICE, IMG_S
         print(f"\n{'-'*10} Loading GS Renderer Model Weights from {renderer_weights_path} {'-'*10}")
 
         if os.path.exists(renderer_weights_path):
+
             renderer.load_state_dict(torch.load(renderer_weights_path, map_location=DEVICE))
+            print(f"\n{'-'*10} GS Renderer loaded and frozen for Diffusion training {'-'*10}")
             return renderer
         else:
             print(f"\n{'-'*10} Path for weights for GS Renderer is Invalid {'-'*10}")

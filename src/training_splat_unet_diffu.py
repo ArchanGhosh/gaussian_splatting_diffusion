@@ -59,9 +59,9 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
         loss_fn = nn.HuberLoss() 
 
         if run_flag == 'start':
-            print(f"{'-'*10} Run Flag given as 'start', setting model weights to default and Start Epochs to 0 and End Epochs to {LONG_RUN_EPOCHS} {'-'*10}")
+            print(f"{'-'*10} Run Flag given as 'start', setting model weights to default and Start Epochs to 0 and End Epochs to {end_long_epochs} {'-'*10}")
             start_long_epochs = 0
-            end_long_epochs = LONG_RUN_EPOCHS
+            
             latents_dataset, GLOBAL_MIN, GLOBAL_MAX = create_latents(encoder, train_data)
             if GLOBAL_MIN is None or GLOBAL_MAX is None:
                 raise ValueError("Couldn't Calculate GLOBAL_MIN or GLOBAL_MAX")
@@ -76,10 +76,9 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
             latents_dataset, _, _ = create_latents(encoder, train_data)
         
         elif run_flag is None or run_flag == "":
-            print(f"{'-'*10} Run Flag is empty, setting model weights to default and Start Epochs to 0 and End Epochs to {LONG_RUN_EPOCHS} {'-'*10}")
-
+            print(f"{'-'*10} Run Flag is empty, setting model weights to default and Start Epochs to 0 and End Epochs to {end_long_epochs} {'-'*10}")
             start_long_epochs = 0
-            end_long_epochs = LONG_RUN_EPOCHS
+
             latents_dataset, GLOBAL_MIN, GLOBAL_MAX = create_latents(encoder, train_data)
             if GLOBAL_MIN is None or GLOBAL_MAX is None:
                 raise ValueError("Couldn't Calculate GLOBAL_MIN or GLOBAL_MAX")
@@ -142,7 +141,7 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
                         sample_z = pred
 
 
-                    final_lat = generate_samples_hq(diffusion_model, n=1).to(DEVICE)
+                    final_lat = generate_samples_hq(diffusion_model, GLOBAL_MIN, GLOBAL_MAX, n=1).to(DEVICE)
                     preview_img = renderer(final_lat).cpu()
 
                     plt.figure(figsize=(2,2))
