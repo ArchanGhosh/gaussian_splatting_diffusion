@@ -61,7 +61,7 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
         if run_flag == 'start':
             print(f"{'-'*10} Run Flag given as 'start', setting model weights to default and Start Epochs to 0 and End Epochs to {end_long_epochs} {'-'*10}")
             start_long_epochs = 0
-            
+
             latents_dataset, GLOBAL_MIN, GLOBAL_MAX = create_latents(encoder, train_data)
             if GLOBAL_MIN is None or GLOBAL_MAX is None:
                 raise ValueError("Couldn't Calculate GLOBAL_MIN or GLOBAL_MAX")
@@ -99,6 +99,7 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
         print(f"{'-'*10} Starting Training {end_long_epochs-start_long_epochs} Epochs {'-'*10}")
 
         os.makedirs(BASE_CHKPNT_DIR, exist_ok=True)
+        os.makedirs(SPLAT_DIFFUSION_TRAINING_IMG_SAVE_DIR, exist_ok=True)
         loss_curve = []
 
         for epoch in range(start_long_epochs+1, end_long_epochs + 1):
