@@ -24,17 +24,17 @@ from src.config import DEVICE, BASE_CHKPNT_DIR, SPLAT_ENCODER_SAVE_NAME, SPLAT_R
 
 def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_intr, log_intr):
     try:
-        
+
         print(f" Training Params Provided: \n Starting Epochs : {start_long_epochs}, \n Ending Epochs : {end_long_epochs}, \n Save Interval : {save_intr}, \n Log Interval : {log_intr}")
 
         train_data = get_stl10_dataloader(batch_size=SPLAT_ENCODER_BASE_BATCH_SIZE, image_size=IMG_SIZE, target_class=TARGET_CLASS)
 
-        if start_long_epochs == 0 or start_long_epochs is None:
-            print(f"{'-'*10} No Starting Epoch Number provided defaulting to 0 {'-'*10}")
+        if start_long_epochs < 0 or start_long_epochs is None:
+            print(f"{'-'*10} No / Invalid Starting Epoch Number provided defaulting to 0 {'-'*10}")
             start_long_epochs = 0
         
-        if end_long_epochs == 0 or end_long_epochs is None:
-            print(f"{'-'*10} No Ending Epoch Number provided defaulting to {LONG_RUN_EPOCHS} {'-'*10}")
+        if end_long_epochs <= 0 or end_long_epochs is None:
+            print(f"{'-'*10} No / Invalid Ending Epoch Number provided defaulting to {LONG_RUN_EPOCHS} {'-'*10}")
             end_long_epochs = 0
 
         if start_long_epochs>end_long_epochs:
