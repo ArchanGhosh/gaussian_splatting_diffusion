@@ -40,6 +40,10 @@ _BETA = torch.linspace(BETA_START, BETA_END, DIFFUSION_STEPS).to(DEVICE)
 _ALPHA = 1. - _BETA
 _ALPHA_HAT = torch.cumprod(_ALPHA, dim=0)
 
+LONG_RUN_EPOCHS = 10000
+SAVE_INTERVAL = 2000
+LOG_INTERVAL = 100
+
 
 # CHECKPOINT DIR and Names
 BASE_CHKPNT_DIR = "CHECKPOINTS" # If Changed, Remember to change in gitignore
