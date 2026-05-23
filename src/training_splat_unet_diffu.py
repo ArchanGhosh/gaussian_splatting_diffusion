@@ -179,7 +179,7 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
 
         print(f"{'-'*10}{state_dict['final_epoch']} : {state_dict['final_epoch_loss']} {'-'*10}")
         
-        diffusion_chk_pth = os.path.join(BASE_CHKPNT_DIR, UNET_DIFF_MODEL_SAVE_NAME+str(loss_curve[-1]["Epoch"]))
+        diffusion_chk_pth = os.path.join(BASE_CHKPNT_DIR, UNET_DIFF_MODEL_SAVE_NAME+str(loss_curve[-1]["Epoch"])+'.pth')
 
         torch.save(state_dict, diffusion_chk_pth)
         print(f"{'-'*10} State saved to: {diffusion_chk_pth} {'-'*10}")

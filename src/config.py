@@ -51,5 +51,5 @@ BASE_CHKPNT_DIR = "CHECKPOINTS" # If Changed, Remember to change in gitignore
 SPLAT_ENCODER_SAVE_NAME = "Splat_Encoder.pth"
 SPLAT_RENDERER_SAVE_NAME = "Splat_Renderer.pth"
 
-UNET_DIFF_MODEL_SAVE_NAME = "Splat_Diffuion_final"
+UNET_DIFF_MODEL_SAVE_NAME = "Splat_Diffuion_final_"
 SPLAT_DIFFUSION_TRAINING_IMG_SAVE_DIR = "splat_diffusion_training_imgs"
