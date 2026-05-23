@@ -165,7 +165,8 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
             'optimizer_state': opt_diff.state_dict(),
             'global_min': GLOBAL_MIN,
             'global_max': GLOBAL_MAX,
-            'loss': loss_curve[-1]["Average_loss"]
+            'loss_curve': loss_curve,
+            'final_epoch_loss': loss_curve[-1]["Average_loss"]
         }
 
         for key, value in state_dict:
