@@ -16,7 +16,7 @@ def load_encoder_state(BASE_CHKPNT_DIR, SPLAT_ENCODER_SAVE_NAME, DEVICE):
         print(f"\n{'-'*10} Loading GS Encoder Model Weights from {encoder_weights_path} {'-'*10}")
 
         if os.path.exists(encoder_weights_path):
-            encoder.load_state_dict(torch.load("splat_encoder_v2_sharp.pth", map_location=DEVICE))
+            encoder.load_state_dict(torch.load(encoder_weights_path, map_location=DEVICE))
 
             for param in encoder.parameters():
                 param.requires_grad = False
@@ -38,10 +38,10 @@ def load_renderer_state(BASE_CHKPNT_DIR, SPLAT_RENDERER_SAVE_NAME, DEVICE, IMG_S
 
         renderer_weights_path = os.path.join(BASE_CHKPNT_DIR, SPLAT_RENDERER_SAVE_NAME)
 
-        print(f"\n{'-'*10} Loading GS Encoder Model Weights from {renderer_weights_path} {'-'*10}")
+        print(f"\n{'-'*10} Loading GS Renderer Model Weights from {renderer_weights_path} {'-'*10}")
 
         if os.path.exists(renderer_weights_path):
-            renderer.load_state_dict(torch.load("splat_renderer_v2.pth", map_location=DEVICE))
+            renderer.load_state_dict(torch.load(renderer_weights_path, map_location=DEVICE))
             return renderer
         else:
             print(f"\n{'-'*10} Path for weights for GS Renderer is Invalid {'-'*10}")
