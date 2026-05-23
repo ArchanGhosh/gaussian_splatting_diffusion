@@ -35,7 +35,7 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
         
         if end_long_epochs <= 0 or end_long_epochs is None:
             print(f"{'-'*10} No / Invalid Ending Epoch Number provided defaulting to {LONG_RUN_EPOCHS} {'-'*10}")
-            end_long_epochs = 0
+            end_long_epochs = LONG_RUN_EPOCHS
 
         if start_long_epochs>end_long_epochs:
             raise ValueError(" Starting Epochs cannot be greater than Ending Epochs ")
