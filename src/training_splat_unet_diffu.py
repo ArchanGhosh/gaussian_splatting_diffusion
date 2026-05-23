@@ -25,7 +25,7 @@ from src.config import DEVICE, BASE_CHKPNT_DIR, SPLAT_ENCODER_SAVE_NAME, SPLAT_R
 
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent
 
 def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_intr, log_intr):
     try:
