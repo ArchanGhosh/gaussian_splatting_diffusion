@@ -11,7 +11,7 @@ from src.differentiable_renderer import DifferentiableSplatRenderer
 def load_encoder_state(BASE_CHKPNT_DIR, SPLAT_ENCODER_SAVE_NAME, DEVICE):
     try:
         encoder = SplatEncoder().to(DEVICE)
-        encoder_weights_path = os.join(BASE_CHKPNT_DIR, SPLAT_ENCODER_SAVE_NAME)
+        encoder_weights_path = os.path.join(BASE_CHKPNT_DIR, SPLAT_ENCODER_SAVE_NAME)
 
         print(f"\n{'-'*10} Loading GS Encoder Model Weights from {encoder_weights_path} {'-'*10}")
 
@@ -36,7 +36,7 @@ def load_renderer_state(BASE_CHKPNT_DIR, SPLAT_RENDERER_SAVE_NAME, DEVICE, IMG_S
     try:
         renderer = DifferentiableSplatRenderer(img_size=IMG_SIZE, grid_size=GRID_SIZE).to(DEVICE)
 
-        renderer_weights_path = os.join(BASE_CHKPNT_DIR, SPLAT_RENDERER_SAVE_NAME)
+        renderer_weights_path = os.path.join(BASE_CHKPNT_DIR, SPLAT_RENDERER_SAVE_NAME)
 
         print(f"\n{'-'*10} Loading GS Encoder Model Weights from {renderer_weights_path} {'-'*10}")
 
