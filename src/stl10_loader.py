@@ -12,6 +12,7 @@ def get_stl10_dataloader(batch_size=32, image_size=128, target_class = 0, split=
         transforms.Resize((image_size, image_size)),
         transforms.ToTensor(),
     ])
+    print(f"\n{'-'*10} Downloading STL 10 data {'-'*10}")
     dataset = datasets.STL10(root=data_root, split=split, download=True, transform=transform)
     dataset.data = dataset.data[:5000]
 
