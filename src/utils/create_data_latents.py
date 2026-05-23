@@ -60,8 +60,8 @@ def create_latents(encoder, data_loader):
         print(f"\n{'-'*10} Latents Ready. Stats Calculated {'-'*10}")
         print(f"\n{'-'*10} Range: {GLOBAL_MIN[0,0,0,0]:.4f} to {GLOBAL_MAX[0,0,0,0]:.4f} {'-'*10}")
 
-        return GLOBAL_MIN, GLOBAL_MAX
+        return latents_dataset, GLOBAL_MIN, GLOBAL_MAX
     
     except Exception as e:
         print(f"\n{'-'*10} Error Calculating Latents : {e}")
-        return None, None
+        return None, None, None
