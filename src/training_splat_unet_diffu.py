@@ -177,7 +177,7 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
             'final_epoch_loss': loss_curve[-1]["Average_Loss"]
         }
 
-        for key, value in state_dict:
+        for key, value in state_dict.items():
             print(f"{key} : {value}")
         
         diffusion_chk_pth = os.path.join(BASE_CHKPNT_DIR, UNET_DIFF_MODEL_SAVE_NAME+loss_curve[-1]["Epoch"])
