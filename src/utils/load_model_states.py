@@ -57,7 +57,7 @@ def load_renderer_state(BASE_CHKPNT_DIR, SPLAT_RENDERER_SAVE_NAME, DEVICE, IMG_S
 
 def load_unet_diffusion_state(diffusion_model, opt_diff, BASE_CHKPNT_DIR, UNET_DIFF_MODEL_SAVE_NAME, DEVICE, start_epoch):
 
-    diffu_chkpnt_path = os.path.join(BASE_CHKPNT_DIR, UNET_DIFF_MODEL_SAVE_NAME+start_epoch+".pth")
+    diffu_chkpnt_path = os.path.join(BASE_CHKPNT_DIR, UNET_DIFF_MODEL_SAVE_NAME+str(start_epoch)+".pth")
 
     print(f"\n{'-'*10} Loading GS Encoder Model Weights from {diffu_chkpnt_path} {'-'*10}")
 
