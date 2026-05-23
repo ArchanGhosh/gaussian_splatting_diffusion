@@ -33,6 +33,7 @@ SPLAT_ENCODER_TRAINING_IMG_SAVE_DIR = "splat_encoder_training_imgs" # If Changed
 DIFFUSION_STEPS = 500
 DIFF_LR = 1e-4
 DIFF_EPOCHS = 2000
+DIFFUSION_BATCH_SIZE = 32
 
 BETA_START = 1e-4
 BETA_END = 0.02
@@ -49,3 +50,6 @@ LOG_INTERVAL = 100
 BASE_CHKPNT_DIR = "CHECKPOINTS" # If Changed, Remember to change in gitignore
 SPLAT_ENCODER_SAVE_NAME = "Splat_Encoder.pth"
 SPLAT_RENDERER_SAVE_NAME = "Splat_Renderer.pth"
+
+UNET_DIFF_MODEL_SAVE_NAME = "Splat_Diffuion_final"
+SPLAT_DIFFUSION_TRAINING_IMG_SAVE_DIR = "splat_diffusion_training_imgs"
