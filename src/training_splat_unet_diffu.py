@@ -26,11 +26,11 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
     try:
         train_data = get_stl10_dataloader(batch_size=SPLAT_ENCODER_BASE_BATCH_SIZE, image_size=IMG_SIZE, target_class=TARGET_CLASS)
 
-        if start_long_epochs is 0 or start_long_epochs is None:
+        if start_long_epochs == 0 or start_long_epochs is None:
             print(f"{'-'*10} No Starting Epoch Number provided defaulting to 0 {'-'*10}")
             start_long_epochs = 0
         
-        if end_long_epochs is 0 or end_long_epochs is None:
+        if end_long_epochs == 0 or end_long_epochs is None:
             print(f"{'-'*10} No Ending Epoch Number provided defaulting to {LONG_RUN_EPOCHS} {'-'*10}")
             end_long_epochs = 0
 
@@ -67,7 +67,7 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
                 raise ValueError("Couldn't Resolve path for checkpoint")
             latents_dataset, _, _ = create_latents(encoder, train_data)
         
-        elif run_flag is None or run_flag is "":
+        elif run_flag is None or run_flag == "":
             print(f"{'-'*10} Run Flag is empty, setting model weights to default and Start Epochs to 0 and End Epochs to {LONG_RUN_EPOCHS} {'-'*10}")
 
             start_long_epochs = 0
@@ -79,11 +79,11 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
         else:
             raise ValueError("Unknown Run Flag")
         
-        if save_intr is None or save_intr is "":
+        if save_intr is None or save_intr == 0:
             print(f"{'-'*10} Save Interval defaulting to {SAVE_INTERVAL} {'-'*10}") 
             save_intr = SAVE_INTERVAL
         
-        if log_intr is None or log_intr is "":
+        if log_intr is None or log_intr == 0:
             print(f"{'-'*10} Log Interval defaulting to {LOG_INTERVAL} {'-'*10}") 
             log_intr = LOG_INTERVAL
         
