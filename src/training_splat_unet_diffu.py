@@ -22,6 +22,11 @@ from src.utils.generate_samples import generate_samples_hq
 
 from src.config import DEVICE, BASE_CHKPNT_DIR, SPLAT_ENCODER_SAVE_NAME, SPLAT_RENDERER_SAVE_NAME, UNET_DIFF_MODEL_SAVE_NAME, IMG_SIZE, GRID_SIZE, SPLAT_ENCODER_BASE_BATCH_SIZE, TARGET_CLASS, LONG_RUN_EPOCHS, LOG_INTERVAL, SAVE_INTERVAL, SPLATS_PER_CELL, PARAMS_PER_SPLAT, DIFF_LR, DIFFUSION_BATCH_SIZE, DIFFUSION_STEPS, SPLAT_DIFFUSION_TRAINING_IMG_SAVE_DIR
 
+
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_intr, log_intr):
     try:
 
@@ -40,7 +45,7 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
         if start_long_epochs>end_long_epochs:
             raise ValueError(" Starting Epochs cannot be greater than Ending Epochs ")
 
-        encoder = load_encoder_state(BASE_CHKPNT_DIR, SPLAT_ENCODER_SAVE_NAME, DEVICE)
+        encoder = load_encoder_state(os.path.join(BASE_DIR, BASE_CHKPNT_DIR), SPLAT_ENCODER_SAVE_NAME, DEVICE)
         if encoder is None:
             raise ValueError("Encoder Failed to Load")
         
