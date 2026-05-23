@@ -174,7 +174,7 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
             'global_min': GLOBAL_MIN,
             'global_max': GLOBAL_MAX,
             'loss_curve': loss_curve,
-            'final_epoch_loss': loss_curve[-1]["Average_loss"]
+            'final_epoch_loss': loss_curve[-1]["Average_Loss"]
         }
 
         for key, value in state_dict:
