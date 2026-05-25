@@ -12,9 +12,11 @@ from src.splat_encoder import SplatEncoder
 from src.differentiable_renderer import DifferentiableSplatRenderer
 from src.vgg_loss import VGGLoss
 
+from src.utils.create_loss_graph import save_loss_curve
+
 from src.config import DEVICE, TARGET_CLASS, IMG_SIZE, GRID_SIZE, SPLAT_ENCODER_BASE_BATCH_SIZE, SPLAT_ENCODER_ACCUM_STEPS, SPLAT_ENCODER_WARMUP_EPOCHS, SPLAT_ENCODER_POLISH_EPOCHS, SPLAT_ENCODER_STARTING_LR, SPLAT_ENCODER_POLISH_LR, SPLAT_ENCODER_VGG_LOSS_RAT, SPLAT_ENCODER_MSE_LOSS_RAT, SPLAT_ENCODER_TRAINING_IMG_SAVE_DIR
 
-from src.config import BASE_CHKPNT_DIR, SPLAT_ENCODER_SAVE_NAME, SPLAT_RENDERER_SAVE_NAME
+from src.config import BASE_CHKPNT_DIR, SPLAT_ENCODER_SAVE_NAME, SPLAT_RENDERER_SAVE_NAME, SAVE_METRICS_DIR
 
 
 os.makedirs(SPLAT_ENCODER_TRAINING_IMG_SAVE_DIR, exist_ok=True)
@@ -48,7 +50,7 @@ opt_ae = optim.Adam(splat_encoder.parameters(), lr=SPLAT_ENCODER_STARTING_LR)
 TOTAL_EPOCHS = SPLAT_ENCODER_WARMUP_EPOCHS + SPLAT_ENCODER_POLISH_EPOCHS
 print(f"\n{'-'*10} Warmup Epochs : {SPLAT_ENCODER_WARMUP_EPOCHS}, Polish Epochs: {SPLAT_ENCODER_POLISH_EPOCHS}, Total Epochs: {TOTAL_EPOCHS} {'-'*10}")
 
-
+loss_curve = []
 # 3. Training Loop
 for epoch in range(TOTAL_EPOCHS + 1):
 
@@ -86,6 +88,7 @@ for epoch in range(TOTAL_EPOCHS + 1):
         epoch_loss += loss.item() * SPLAT_ENCODER_ACCUM_STEPS
 
     print(f"\n{'-'*10} Epoch {epoch}: Loss {epoch_loss/len(spt_enc_loader):.4f} {'-'*10}")
+    loss_curve.append({"Epoch": epoch, "Loss": epoch_loss})
     if epoch % 10 == 0:
         avg_loss = epoch_loss / len(spt_enc_loader)
         #print(f"\n{'-'*10} Epoch {epoch}: Loss {avg_loss:.4f} {'-'*10}")
@@ -108,6 +111,14 @@ for epoch in range(TOTAL_EPOCHS + 1):
             plt.tight_layout()
             plt.savefig(save_path, dpi=300, bbox_inches="tight")
             plt.close(fig)
+    epochs_4_plt = [item["Epoch"] for item in loss_curve]
+    losses_4_plt = [item["Loss"] for item in loss_curve]
+
+    os.mkdir(SAVE_METRICS_DIR, exists_ok=True)
+    loss_graph_save_path = os.path.join(SAVE_METRICS_DIR, SPLAT_ENCODER_SAVE_NAME+str(loss_curve[-1]["Epoch"])+ '_loss_curve,png')
+
+    save_loss_curve(epochs_4_plt, losses_4_plt, tilte="Encoder Loss", x_label="Epochs", y_label="Huber Loss", output_path= loss_graph_save_path)
+
 
 print(f"\n{'-'*10} Splat Encoder Training Complete {'-'*10}")
 
