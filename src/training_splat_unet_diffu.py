@@ -14,13 +14,15 @@ from src.unet_diffusion import SplatUNetDiffu
 from src.stl10_loader import get_stl10_dataloader
 from src.utils.add_noise import noise_images
 
+from src.utils.create_loss_graph import save_loss_curve
+
 from src.utils.load_model_states import load_encoder_state, load_renderer_state, load_unet_diffusion_state
 
 from src.utils.create_data_latents import create_latents
 from src.utils.generate_samples import generate_samples_hq
 
 
-from src.config import DEVICE, BASE_CHKPNT_DIR, SPLAT_ENCODER_SAVE_NAME, SPLAT_RENDERER_SAVE_NAME, UNET_DIFF_MODEL_SAVE_NAME, IMG_SIZE, GRID_SIZE, SPLAT_ENCODER_BASE_BATCH_SIZE, TARGET_CLASS, LONG_RUN_EPOCHS, LOG_INTERVAL, SAVE_INTERVAL, SPLATS_PER_CELL, PARAMS_PER_SPLAT, DIFF_LR, DIFFUSION_BATCH_SIZE, DIFFUSION_STEPS, SPLAT_DIFFUSION_TRAINING_IMG_SAVE_DIR
+from src.config import DEVICE, BASE_CHKPNT_DIR, SPLAT_ENCODER_SAVE_NAME, SPLAT_RENDERER_SAVE_NAME, UNET_DIFF_MODEL_SAVE_NAME, IMG_SIZE, GRID_SIZE, SPLAT_ENCODER_BASE_BATCH_SIZE, TARGET_CLASS, LONG_RUN_EPOCHS, LOG_INTERVAL, SAVE_INTERVAL, SPLATS_PER_CELL, PARAMS_PER_SPLAT, DIFF_LR, DIFFUSION_BATCH_SIZE, DIFFUSION_STEPS, SPLAT_DIFFUSION_TRAINING_IMG_SAVE_DIR, SAVE_METRICS_DIR
 
 
 from pathlib import Path
@@ -182,6 +184,14 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
 
         torch.save(state_dict, diffusion_chk_pth)
         print(f"{'-'*10} State saved to: {diffusion_chk_pth} {'-'*10}")
+
+        epochs_4_plt = [item["Epoch"] for item in loss_curve]
+        losses_4_plt = [item["Average_Loss"] for item in loss_curve]
+
+        os.mkdir(SAVE_METRICS_DIR, exists_ok=True)
+        loss_graph_save_path = os.path.join(SAVE_METRICS_DIR, UNET_DIFF_MODEL_SAVE_NAME+str(loss_curve[-1]["Epoch"])+ '_loss_curve,png')
+
+        save_loss_curve(epochs_4_plt, losses_4_plt, tilte="Diffusion Loss", x_label="Epochs", y_label="Huber Loss", output_path= loss_graph_save_path)
         
 
     except Exception as e:
