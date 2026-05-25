@@ -53,3 +53,5 @@ SPLAT_RENDERER_SAVE_NAME = "Splat_Renderer.pth"
 
 UNET_DIFF_MODEL_SAVE_NAME = "Splat_Diffuion_final_"
 SPLAT_DIFFUSION_TRAINING_IMG_SAVE_DIR = "splat_diffusion_training_imgs"
+
+SAVE_METRICS_DIR = "saved_training_metrics"

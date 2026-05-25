@@ -223,3 +223,4 @@ CHECKPOINTS/
 splat_encoder_training_imgs/
 data/
 splat_diffusion_training_imgs/
+saved_training_metrics/
