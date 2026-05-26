@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 def save_loss_curve(x_values, y_values, title, x_label, y_label, output_path):
 
     plt.figure(figsize=(8, 5))
-    plt.plot(x_values, y_values, marker="o")
+    plt.plot(x_values, y_values)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
     plt.title(title)
