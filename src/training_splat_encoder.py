@@ -123,7 +123,7 @@ epochs_4_plt = [item["Epoch"] for item in loss_curve]
 losses_4_plt = [item["Loss"] for item in loss_curve]
 
 os.makedirs(SAVE_METRICS_DIR, exist_ok=True)
-loss_graph_save_path = os.path.join(SAVE_METRICS_DIR, SPLAT_ENCODER_SAVE_NAME+str(loss_curve[-1]["Epoch"])+ '_loss_curve,png')
+loss_graph_save_path = os.path.join(SAVE_METRICS_DIR, "GS Encoder Training_"+str(loss_curve[-1]["Epoch"])+ '_epoch_loss_curve.png')
 
 save_loss_curve(epochs_4_plt, losses_4_plt, title="Encoder Loss", x_label="Epochs", y_label="Huber Loss", output_path= loss_graph_save_path)
 

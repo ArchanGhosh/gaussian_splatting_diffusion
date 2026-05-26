@@ -108,7 +108,7 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
         epoch_bar = tqdm(range(start_long_epochs + 1, end_long_epochs + 1), desc="Epochs")
         for epoch in epoch_bar:
             epoch_loss = 0
-            for i, (raw_latents,_) in enumerate(latent_loader):
+            for i, (raw_latents) in enumerate(latent_loader):
                 raw_latents = raw_latents.to(DEVICE)
 
                 clean_latents = (raw_latents - GLOBAL_MIN) / (GLOBAL_MAX - GLOBAL_MIN)
@@ -133,7 +133,7 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
                 loss=f"{epoch_loss/(i+1):.4f}"
             )
 
-
+            loss_curve.append({"Epoch": epoch, "Average_Loss": epoch_loss / len(latent_loader)})
             if epoch % log_intr == 0:
                 avg_loss = epoch_loss / len(latent_loader)
                 tqdm.write(f"{'-'*10} Epoch {epoch}: Loss {avg_loss:.6f} {'-'*10}")
@@ -195,8 +195,8 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
         epochs_4_plt = [item["Epoch"] for item in loss_curve]
         losses_4_plt = [item["Average_Loss"] for item in loss_curve]
 
-        os.makedir(SAVE_METRICS_DIR, exist_ok=True)
-        loss_graph_save_path = os.path.join(SAVE_METRICS_DIR, UNET_DIFF_MODEL_SAVE_NAME+str(loss_curve[-1]["Epoch"])+ '_loss_curve,png')
+        os.makedirs(SAVE_METRICS_DIR, exist_ok=True)
+        loss_graph_save_path = os.path.join(SAVE_METRICS_DIR, UNET_DIFF_MODEL_SAVE_NAME+str(loss_curve[-1]["Epoch"])+ '_epoch_loss_curve.png')
 
         save_loss_curve(epochs_4_plt, losses_4_plt, title="Diffusion Loss", x_label="Epochs", y_label="Huber Loss", output_path= loss_graph_save_path)
         
