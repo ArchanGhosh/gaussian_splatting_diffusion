@@ -68,4 +68,3 @@ All the default params are find within ```src/config.py``` including ```DEVICE``
 The current code supports ```CUDA``` and ```MPS```. For MPS make sure that the correct version of pytorch is installed and supported.
 
 
-### NOTE: This is still a WIP and changes are being added.
