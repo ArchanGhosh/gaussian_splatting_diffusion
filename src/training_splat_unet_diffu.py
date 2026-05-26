@@ -34,7 +34,7 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
     try:
 
         print(f" Training Params Provided: \n Starting Epochs : {start_long_epochs}, \n Ending Epochs : {end_long_epochs}, \n Save Interval : {save_intr}, \n Log Interval : {log_intr}")
-
+        loss_curve = []
         train_data = get_stl10_dataloader(batch_size=SPLAT_ENCODER_BASE_BATCH_SIZE, image_size=IMG_SIZE, target_class=TARGET_CLASS)
 
         if start_long_epochs < 0 or start_long_epochs is None:
@@ -103,7 +103,7 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
 
         os.makedirs(BASE_CHKPNT_DIR, exist_ok=True)
         os.makedirs(SPLAT_DIFFUSION_TRAINING_IMG_SAVE_DIR, exist_ok=True)
-        loss_curve = []
+        
 
         epoch_bar = tqdm(range(start_long_epochs + 1, end_long_epochs + 1), desc="Epochs")
         for epoch in epoch_bar:
@@ -137,7 +137,7 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
             if epoch % log_intr == 0:
                 avg_loss = epoch_loss / len(latent_loader)
                 tqdm.write(f"{'-'*10} Epoch {epoch}: Loss {avg_loss:.6f} {'-'*10}")
-                loss_curve.append({"Epoch": epoch, "Average_Loss": avg_loss})
+                #loss_curve.append({"Epoch": epoch, "Average_Loss": avg_loss})
 
 
                 diffusion_model.eval()
@@ -196,7 +196,7 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
         losses_4_plt = [item["Average_Loss"] for item in loss_curve]
 
         os.makedirs(SAVE_METRICS_DIR, exist_ok=True)
-        loss_graph_save_path = os.path.join(SAVE_METRICS_DIR, UNET_DIFF_MODEL_SAVE_NAME+str(loss_curve[-1]["Epoch"])+ '_epoch_loss_curve.png')
+        loss_graph_save_path = os.path.join(SAVE_METRICS_DIR, UNET_DIFF_MODEL_SAVE_NAME+str(start_long_epochs+1)+'_'+str(end_long_epochs)+'_epoch_loss_curve.png')
 
         save_loss_curve(epochs_4_plt, losses_4_plt, title="Diffusion Loss", x_label="Epochs", y_label="Huber Loss", output_path= loss_graph_save_path)
         
