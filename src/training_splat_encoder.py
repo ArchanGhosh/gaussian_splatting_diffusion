@@ -53,7 +53,7 @@ print(f"\n{'-'*10} Warmup Epochs : {SPLAT_ENCODER_WARMUP_EPOCHS}, Polish Epochs:
 
 loss_curve = []
 # 3. Training Loop
-epoch_bar = tqdm(range(TOTAL_EPOCHS + 1), desc="Epochs")
+epoch_bar = tqdm(range(1, TOTAL_EPOCHS + 1), desc="Epochs")
 for epoch in epoch_bar:
 
     # --- LR SCHEDULE ---
@@ -125,7 +125,7 @@ losses_4_plt = [item["Loss"] for item in loss_curve]
 os.makedirs(SAVE_METRICS_DIR, exist_ok=True)
 loss_graph_save_path = os.path.join(SAVE_METRICS_DIR, SPLAT_ENCODER_SAVE_NAME+str(loss_curve[-1]["Epoch"])+ '_loss_curve,png')
 
-save_loss_curve(epochs_4_plt, losses_4_plt, tilte="Encoder Loss", x_label="Epochs", y_label="Huber Loss", output_path= loss_graph_save_path)
+save_loss_curve(epochs_4_plt, losses_4_plt, title="Encoder Loss", x_label="Epochs", y_label="Huber Loss", output_path= loss_graph_save_path)
 
 
 print(f"\n{'-'*10} Splat Encoder Training Complete {'-'*10}")

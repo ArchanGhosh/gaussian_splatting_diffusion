@@ -198,7 +198,7 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
         os.makedir(SAVE_METRICS_DIR, exist_ok=True)
         loss_graph_save_path = os.path.join(SAVE_METRICS_DIR, UNET_DIFF_MODEL_SAVE_NAME+str(loss_curve[-1]["Epoch"])+ '_loss_curve,png')
 
-        save_loss_curve(epochs_4_plt, losses_4_plt, tilte="Diffusion Loss", x_label="Epochs", y_label="Huber Loss", output_path= loss_graph_save_path)
+        save_loss_curve(epochs_4_plt, losses_4_plt, title="Diffusion Loss", x_label="Epochs", y_label="Huber Loss", output_path= loss_graph_save_path)
         
 
     except Exception as e:
