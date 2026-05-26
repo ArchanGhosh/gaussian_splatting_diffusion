@@ -53,19 +53,20 @@ print(f"\n{'-'*10} Warmup Epochs : {SPLAT_ENCODER_WARMUP_EPOCHS}, Polish Epochs:
 
 loss_curve = []
 # 3. Training Loop
-for epoch in tqdm(range(TOTAL_EPOCHS + 1), desc="Epochs"):
+epoch_bar = tqdm(range(TOTAL_EPOCHS + 1), desc="Epochs")
+for epoch in epoch_bar:
 
     # --- LR SCHEDULE ---
     # After Warmup Epoch Reduce LR 
     if epoch == SPLAT_ENCODER_WARMUP_EPOCHS:
-        print(f"\n{'-'*10} SWITCHING TO POLISHING PHASE LR : {SPLAT_ENCODER_POLISH_LR} {'-'*10}")
+        tqdm.write(f"\n{'-'*10} SWITCHING TO POLISHING PHASE LR : {SPLAT_ENCODER_POLISH_LR} {'-'*10}")
         for param_group in opt_ae.param_groups:
             param_group['lr'] = SPLAT_ENCODER_POLISH_LR
 
     epoch_loss = 0
     opt_ae.zero_grad()
 
-    for i, (images, _) in enumerate(tqdm(spt_enc_loader, desc="Batches", leave=False)):
+    for i, (images, _) in enumerate(spt_enc_loader):
         images = images.to(DEVICE)
         images_resized = F.interpolate(images, size=(128, 128), mode='bilinear', align_corners=False)
 
@@ -87,8 +88,12 @@ for epoch in tqdm(range(TOTAL_EPOCHS + 1), desc="Epochs"):
             opt_ae.zero_grad()
 
         epoch_loss += loss.item() * SPLAT_ENCODER_ACCUM_STEPS
+        epoch_bar.set_postfix(
+            batch=f"{i+1}/{len(spt_enc_loader)}",
+            loss=f"{epoch_loss/(i+1):.4f}"
+        )
 
-    print(f"{'-'*10} Epoch {epoch}: Loss {epoch_loss/len(spt_enc_loader):.4f} {'-'*10}")
+    tqdm.write(f"{'-'*10} Epoch {epoch}: Loss {epoch_loss/len(spt_enc_loader):.4f} {'-'*10}")
     loss_curve.append({"Epoch": epoch, "Loss": epoch_loss})
     if epoch % 10 == 0:
         avg_loss = epoch_loss / len(spt_enc_loader)
@@ -97,7 +102,7 @@ for epoch in tqdm(range(TOTAL_EPOCHS + 1), desc="Epochs"):
         # Visual Check
         with torch.no_grad():
             save_path = os.path.join(SPLAT_ENCODER_TRAINING_IMG_SAVE_DIR, f"epoch_{epoch:03d}.png")
-            print(f"{'-'*10} SAVING IMG for Epoch-{epoch} at {save_path} {'-'*10}")
+            tqdm.write(f"{'-'*10} SAVING IMG for Epoch-{epoch} at {save_path} {'-'*10}")
             fig, ax = plt.subplots(1, 2, figsize=(6,3))
 
             ax[0].imshow(images_resized[0].permute(1,2,0).cpu().numpy())

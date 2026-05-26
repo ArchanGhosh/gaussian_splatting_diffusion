@@ -105,9 +105,10 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
         os.makedirs(SPLAT_DIFFUSION_TRAINING_IMG_SAVE_DIR, exist_ok=True)
         loss_curve = []
 
-        for epoch in tqdm(range(start_long_epochs + 1, end_long_epochs + 1),desc="Epochs"):
+        epoch_bar = tqdm(range(start_long_epochs + 1, end_long_epochs + 1), desc="Epochs")
+        for epoch in epoch_bar:
             epoch_loss = 0
-            for raw_latents in tqdm(latent_loader, desc="Batches", leave=False):
+            for i, (raw_latents,_) in enumerate(latent_loader):
                 raw_latents = raw_latents.to(DEVICE)
 
                 clean_latents = (raw_latents - GLOBAL_MIN) / (GLOBAL_MAX - GLOBAL_MIN)
@@ -126,11 +127,16 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
                 loss.backward()
                 opt_diff.step()
                 epoch_loss += loss.item()
+                
+                epoch_bar.set_postfix(
+                batch=f"{i+1}/{len(latent_loader)}",
+                loss=f"{epoch_loss/(i+1):.4f}"
+            )
 
 
             if epoch % log_intr == 0:
                 avg_loss = epoch_loss / len(latent_loader)
-                print(f"{'-'*10} Epoch {epoch}: Loss {avg_loss:.6f} {'-'*10}")
+                tqdm.write(f"{'-'*10} Epoch {epoch}: Loss {avg_loss:.6f} {'-'*10}")
                 loss_curve.append({"Epoch": epoch, "Average_Loss": avg_loss})
 
 
@@ -161,7 +167,7 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
             if epoch % save_intr == 0:
                 path = os.path.join(BASE_CHKPNT_DIR, f"Splat_Diffusion_{epoch}.pth")
                 torch.save(diffusion_model.state_dict(), path)
-                print(f"{'-'*10} Checkpoint saved: {path} {'-'*10}")
+                tqdm.write(f"{'-'*10} Checkpoint saved: {path} {'-'*10}")
 
         
         print(f"{'-'*10} Training Complete Proceeding to Save Final Model {'-'*10}")

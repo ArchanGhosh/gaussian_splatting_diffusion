@@ -1,8 +1,9 @@
 import torch
 from src.config import DEVICE, DIFFUSION_STEPS, _ALPHA, _ALPHA_HAT, _BETA
+from tqdm import tqdm
 
 def generate_samples_hq(model, GLOBAL_MIN, GLOBAL_MAX, n=8):
-    print(f"\n{'-'*10} Generating {n} High-Quality Samples {'-'*10}")
+    tqdm.write(f"\n{'-'*10} Generating {n} High-Quality Samples {'-'*10}")
     model.eval()
     with torch.no_grad():
 
