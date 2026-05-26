@@ -8,6 +8,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 from src.unet_diffusion import SplatUNetDiffu
 
@@ -104,9 +105,9 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
         os.makedirs(SPLAT_DIFFUSION_TRAINING_IMG_SAVE_DIR, exist_ok=True)
         loss_curve = []
 
-        for epoch in range(start_long_epochs+1, end_long_epochs + 1):
+        for epoch in tqdm(range(start_long_epochs + 1, end_long_epochs + 1),desc="Epochs"):
             epoch_loss = 0
-            for raw_latents in latent_loader:
+            for raw_latents in tqdm(latent_loader, desc="Batches", leave=False):
                 raw_latents = raw_latents.to(DEVICE)
 
                 clean_latents = (raw_latents - GLOBAL_MIN) / (GLOBAL_MAX - GLOBAL_MIN)
@@ -188,7 +189,7 @@ def run_splat_diff_training(run_flag, start_long_epochs, end_long_epochs, save_i
         epochs_4_plt = [item["Epoch"] for item in loss_curve]
         losses_4_plt = [item["Average_Loss"] for item in loss_curve]
 
-        os.mkdir(SAVE_METRICS_DIR, exists_ok=True)
+        os.makedir(SAVE_METRICS_DIR, exist_ok=True)
         loss_graph_save_path = os.path.join(SAVE_METRICS_DIR, UNET_DIFF_MODEL_SAVE_NAME+str(loss_curve[-1]["Epoch"])+ '_loss_curve,png')
 
         save_loss_curve(epochs_4_plt, losses_4_plt, tilte="Diffusion Loss", x_label="Epochs", y_label="Huber Loss", output_path= loss_graph_save_path)

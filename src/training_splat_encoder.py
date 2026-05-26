@@ -53,7 +53,7 @@ print(f"\n{'-'*10} Warmup Epochs : {SPLAT_ENCODER_WARMUP_EPOCHS}, Polish Epochs:
 
 loss_curve = []
 # 3. Training Loop
-for epoch in tqdm(range(TOTAL_EPOCHS + 1)):
+for epoch in tqdm(range(TOTAL_EPOCHS + 1), desc="Epochs"):
 
     # --- LR SCHEDULE ---
     # After Warmup Epoch Reduce LR 
@@ -65,7 +65,7 @@ for epoch in tqdm(range(TOTAL_EPOCHS + 1)):
     epoch_loss = 0
     opt_ae.zero_grad()
 
-    for i, (images, _) in enumerate(spt_enc_loader):
+    for i, (images, _) in enumerate(tqdm(spt_enc_loader, desc="Batches", leave=False)):
         images = images.to(DEVICE)
         images_resized = F.interpolate(images, size=(128, 128), mode='bilinear', align_corners=False)
 
@@ -112,13 +112,15 @@ for epoch in tqdm(range(TOTAL_EPOCHS + 1)):
             plt.tight_layout()
             plt.savefig(save_path, dpi=300, bbox_inches="tight")
             plt.close(fig)
-    epochs_4_plt = [item["Epoch"] for item in loss_curve]
-    losses_4_plt = [item["Loss"] for item in loss_curve]
 
-    os.mkdir(SAVE_METRICS_DIR, exists_ok=True)
-    loss_graph_save_path = os.path.join(SAVE_METRICS_DIR, SPLAT_ENCODER_SAVE_NAME+str(loss_curve[-1]["Epoch"])+ '_loss_curve,png')
 
-    save_loss_curve(epochs_4_plt, losses_4_plt, tilte="Encoder Loss", x_label="Epochs", y_label="Huber Loss", output_path= loss_graph_save_path)
+epochs_4_plt = [item["Epoch"] for item in loss_curve]
+losses_4_plt = [item["Loss"] for item in loss_curve]
+
+os.makedirs(SAVE_METRICS_DIR, exist_ok=True)
+loss_graph_save_path = os.path.join(SAVE_METRICS_DIR, SPLAT_ENCODER_SAVE_NAME+str(loss_curve[-1]["Epoch"])+ '_loss_curve,png')
+
+save_loss_curve(epochs_4_plt, losses_4_plt, tilte="Encoder Loss", x_label="Epochs", y_label="Huber Loss", output_path= loss_graph_save_path)
 
 
 print(f"\n{'-'*10} Splat Encoder Training Complete {'-'*10}")
