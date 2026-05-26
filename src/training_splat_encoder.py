@@ -6,6 +6,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 from src.stl10_loader import get_stl10_dataloader
 from src.splat_encoder import SplatEncoder
@@ -52,7 +53,7 @@ print(f"\n{'-'*10} Warmup Epochs : {SPLAT_ENCODER_WARMUP_EPOCHS}, Polish Epochs:
 
 loss_curve = []
 # 3. Training Loop
-for epoch in range(TOTAL_EPOCHS + 1):
+for epoch in tqdm(range(TOTAL_EPOCHS + 1)):
 
     # --- LR SCHEDULE ---
     # After Warmup Epoch Reduce LR 
@@ -87,7 +88,7 @@ for epoch in range(TOTAL_EPOCHS + 1):
 
         epoch_loss += loss.item() * SPLAT_ENCODER_ACCUM_STEPS
 
-    print(f"\n{'-'*10} Epoch {epoch}: Loss {epoch_loss/len(spt_enc_loader):.4f} {'-'*10}")
+    print(f"{'-'*10} Epoch {epoch}: Loss {epoch_loss/len(spt_enc_loader):.4f} {'-'*10}")
     loss_curve.append({"Epoch": epoch, "Loss": epoch_loss})
     if epoch % 10 == 0:
         avg_loss = epoch_loss / len(spt_enc_loader)
@@ -96,7 +97,7 @@ for epoch in range(TOTAL_EPOCHS + 1):
         # Visual Check
         with torch.no_grad():
             save_path = os.path.join(SPLAT_ENCODER_TRAINING_IMG_SAVE_DIR, f"epoch_{epoch:03d}.png")
-            print(f"\n{'-'*10} SAVING IMG for Epoch-{epoch} at {save_path} {'-'*10}")
+            print(f"{'-'*10} SAVING IMG for Epoch-{epoch} at {save_path} {'-'*10}")
             fig, ax = plt.subplots(1, 2, figsize=(6,3))
 
             ax[0].imshow(images_resized[0].permute(1,2,0).cpu().numpy())
